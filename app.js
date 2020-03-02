@@ -101,7 +101,7 @@ app.get('/api/unsubscribe', function (req, res) {
 });
 
 // Check everyday at 6am for Dates
-cron.schedule('14 14 * * *', () => {
+cron.schedule('0 6 * * *', () => {
 
   console.log('Cron job ran!');
 

@@ -110,7 +110,6 @@ cron.schedule('0 6 * * *', () => {
     const today = new Date();
     const dayBefore = new Date(today.setDate(today.getDate() + 1));
     
-    
     // Loop through records
     records.forEach(record => {
       if (record => record.get('Dining Date') === dayBefore) {

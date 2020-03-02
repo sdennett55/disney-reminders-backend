@@ -12,7 +12,7 @@ const Sentry = require('@sentry/node');
 Sentry.init({ dsn: 'https://d4e891bb61ad4db29a96263feffd48fe@sentry.io/3357421' });
 
 const environment = process.env.NODE_ENV;
-const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 'https://disney-reminders-backend.herokuapp.com';
+const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 'https://reminders.disneytoolkit.com';
 
 // Routes
 var app = express();
@@ -25,7 +25,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.post(`${RELATIVE_PATH}/api/submitEmail`, function (req, res) {
+app.post('/api/submitEmail', function (req, res) {
   const { email, diningDate, fastPassDate } = req.body.user;
 
   // Validate the date and email
@@ -71,7 +71,7 @@ app.post(`${RELATIVE_PATH}/api/submitEmail`, function (req, res) {
 
 });
 
-app.get(`${RELATIVE_PATH}/api/unsubscribe`, function (req, res) {
+app.get('/api/unsubscribe', function (req, res) {
   const { email } = req.query;
 
   // Find ID in the Airtable

@@ -7,6 +7,7 @@ const isValidDate = require('date-fns/isValid');
 const parseISO = require('date-fns/parseISO');
 const {sendEmail, dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPassReminder, todayFastPassReminder } = require('./send_email');
 const { checkDatabase, removeFromDatabase, addToDatabase } = require('./database');
+const cors = require('cors');
 
 const Sentry = require('@sentry/node');
 Sentry.init({ dsn: 'https://d4e891bb61ad4db29a96263feffd48fe@sentry.io/3357421' });
@@ -16,6 +17,8 @@ const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 
 
 // Routes
 var app = express();
+
+app.use(cors());
 
 app.use(
   bodyParser.urlencoded({

@@ -37,7 +37,7 @@ function dayBeforeDiningReminder({email, date}) {
   return sendEmail({
     to: email,
     subject: 'Reminder to make your Advanced Dining Reservations tommorrow!',
-    body: `Tomorrow at your local time of ${new Date(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).replace(/^0+/, '')} you can start booking your Dining Reservations for your trip to Walt Disney World! <br/><br/>Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning as well. Good luck! 
+    body: `Tomorrow at your local time of ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).replace(/^0+/, '')} you can start booking your Dining Reservations for your trip to Walt Disney World! <br/><br/>Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning as well. Good luck! 
     
     <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
   }).then(successMessage => {
@@ -65,7 +65,7 @@ function dayBeforeFastPassReminder({email, date}) {
   return sendEmail({
     to: email,
     subject: 'Reminder to book your FastPass+ reservations tommorrow!',
-    body: `Tomorrow at your local time of (${new Date(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).replace(/^0+/, '')}) you can start booking your FastPass+ Reservations for your trip to Walt Disney World!<br/><br/> Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning as well. Good luck! 
+    body: `Tomorrow at your local time of (${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).replace(/^0+/, '')}) you can start booking your FastPass+ Reservations for your trip to Walt Disney World!<br/><br/> Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning as well. Good luck! 
     
     <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
   }).then(successMessage => {

@@ -1,7 +1,6 @@
 var nodemailer = require('nodemailer');
 
 const environment = process.env.NODE_ENV;
-// @TODO: Add production link here
 const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 'https://reminders.disneytoolkit.com';
 
 function sendEmail({ to, subject, body }) {

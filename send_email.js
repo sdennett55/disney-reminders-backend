@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
 
 const environment = process.env.NODE_ENV;
-const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 'https://reminders.disneytoolkit.com';
+const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 'https://disney-reminders-backend.herokuapp.com';
 
 function sendEmail({ to, subject, body }) {
   return new Promise((resolve, reject) => {

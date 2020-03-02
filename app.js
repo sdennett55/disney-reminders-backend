@@ -25,7 +25,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.post('/api/submitEmail', function (req, res) {
+app.post(`${RELATIVE_PATH}/api/submitEmail`, function (req, res) {
   const { email, diningDate, fastPassDate } = req.body.user;
 
   // Validate the date and email
@@ -71,7 +71,7 @@ app.post('/api/submitEmail', function (req, res) {
 
 });
 
-app.get('/api/unsubscribe', function (req, res) {
+app.get(`${RELATIVE_PATH}/api/unsubscribe`, function (req, res) {
   const { email } = req.query;
 
   // Find ID in the Airtable

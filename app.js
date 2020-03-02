@@ -12,7 +12,7 @@ const Sentry = require('@sentry/node');
 Sentry.init({ dsn: 'https://d4e891bb61ad4db29a96263feffd48fe@sentry.io/3357421' });
 
 const environment = process.env.NODE_ENV;
-const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 'https://reminders.disneytoolkit.com';
+const RELATIVE_PATH = environment === 'development' ? 'https://disney-reminders-backend.herokuapp.com' : 'https://reminders.disneytoolkit.com';
 
 // Routes
 var app = express();

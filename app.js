@@ -9,7 +9,7 @@ const {sendEmail, dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPas
 const { checkDatabase, removeFromDatabase, addToDatabase } = require('./database');
 const cors = require('cors');
 
-const Sentry = require('@sentry/node');
+const Sentry = require('@sentry/node'); // white space add
 Sentry.init({ dsn: 'https://d4e891bb61ad4db29a96263feffd48fe@sentry.io/3357421' });
 
 const environment = process.env.NODE_ENV;

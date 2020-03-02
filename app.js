@@ -104,7 +104,7 @@ app.get('/api/unsubscribe', function (req, res) {
 });
 
 // Check everyday at 6am for Dates
-cron.schedule('0 6 * * *', () => {
+cron.schedule('40 6 * * *', () => {
 
   console.log('Cron job ran!');
 
@@ -133,6 +133,9 @@ cron.schedule('0 6 * * *', () => {
       console.error(`There was an error when checking the database: ${err}`)
     }
   });
+}, {
+  scheduled: true,
+  timezone: 'America/New_York'
 });
 
 app.listen(process.env['PORT'], () => console.log(`Example app listening on port ${process.env['PORT']}!`))

@@ -24,7 +24,7 @@ function removeFromDatabase(id, removeCallback) {
   });
 }
 
-function addToDatabase(email, diningDate, fastPassDate, addCallback) {
+function addToDatabase(email, diningDate, fastPassDate, res, addCallback) {
   table.create([
     {
       "fields": {
@@ -35,7 +35,7 @@ function addToDatabase(email, diningDate, fastPassDate, addCallback) {
     }
   ], function (err, records) {
     if (err) {
-      return res.send(`There was an issue writing to the database. Please try again later.`);
+      return res.send(`There was an issue writing to the database: ${err}`);
     }
 
     return addCallback();

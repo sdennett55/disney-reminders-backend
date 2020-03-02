@@ -5,8 +5,11 @@ const bodyParser = require('body-parser');
 const validator = require("email-validator");
 const isValidDate = require('date-fns/isValid');
 const parseISO = require('date-fns/parseISO');
-const sendEmail = require('./send_email');
+const {sendEmail, dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPassReminder, todayFastPassReminder } = require('./send_email');
 const { checkDatabase, removeFromDatabase, addToDatabase } = require('./database');
+
+const Sentry = require('@sentry/node');
+Sentry.init({ dsn: 'https://d4e891bb61ad4db29a96263feffd48fe@sentry.io/3357421' });
 
 const environment = process.env.NODE_ENV;
 // @TODO: Add production link here
@@ -51,12 +54,12 @@ app.post('/api/submitEmail', function (req, res) {
     }
 
     // Write User to the Airtable
-    addToDatabase(email, diningDate, fastPassDate, () => {
+    addToDatabase(email, diningDate, fastPassDate, res, () => {
       // Send confirmation email
       sendEmail({
         to: email,
         subject: 'Confirmation for Disney Reservations Reminder!',
-        body: `Thanks for signing up! <br/><br/> This is just a confirmation email to let you know that ${email} will be receiving an email 24 hours before it's time to make Dining Reservations on ${diningDate} and on the morning of.<br/><br/> You will also be receiving an email 24 hours before it's time to make FastPass Reservations on ${fastPassDate} and on the morning of.  <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
+        body: `Thanks for signing up! <br/><br/> This is just a confirmation email to let you know that ${email} will be receiving an email 24 hours before it's time to make Dining Reservations on ${new Date(diningDate).toLocaleDateString()} and on the morning of.<br/><br/> You will also be receiving an email 24 hours before it's time to make FastPass Reservations on ${new Date(fastPassDate).toLocaleDateString()} and on the morning of.  <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
       }).then(successMessage => {
         console.log(successMessage);
         return res.send(`Success!`);
@@ -99,50 +102,35 @@ app.get('/api/unsubscribe', function (req, res) {
 });
 
 // Check everyday at 6am for Dates
-cron.schedule('0 6 * * *', () => {
-  // If it's the day before it's time to book Dining Reservations, send an email.
+cron.schedule('14 14 * * *', () => {
 
-  // Check Airtable
+  console.log('Cron job ran!');
+
+  // Check Airtable for any date matches
   checkDatabase((records, fetchNextPage) => {
     const today = new Date();
-    const formattedToday = today.toISOString().split('T')[0];
-    const dayBefore = new Date(today.setDate(today.getDate() - 1)).toISOString().split('T')[0];
+    const dayBefore = new Date(today.setDate(today.getDate() + 1));
     
-    // Check if diningDate is the day before
-    if (records.find(record => record.get('Dining Date') === dayBefore && record.get('FastPass Date') === dayBefore))  {
-      // send combinedDayBeforeReminder to record.get('Email') and removeFromDatabase the record.getId()
-    } else if (records.find(record => record.get('Dining Date') === formattedToday && record.get('FastPass Date') === formattedToday)) {
-      // send combinedTodayReminder to record.get('Email') and removeFromDatabase the record.getId()
-    } else if (records.find(record => record.get('Dining Date') === dayBefore)) {
-      // send dayBeforeDiningReminder to record.get('Email') and removeFromDatabase the record.getId()
-    } else if (records.find(record => record.get('Dining Date') === formattedToday)) {
-      // send todayDiningReminder to record.get('Email') and removeFromDatabase the record.getId()
-    } else if (records.find(record => record.get('FastPass Date') === dayBefore)) {
-      // send dayBeforeFastPassReminder to record.get('Email') and removeFromDatabase the record.getId()
-    } else if (records.find(record => record.get('FastPass Date') === formattedToday)) {
-      // send todayFastPassReminder to record.get('Email') and removeFromDatabase the record.getId()
-    }
+    
+    // Loop through records
+    records.forEach(record => {
+      if (record => record.get('Dining Date') === dayBefore) {
+        dayBeforeDiningReminder({email: record.get('Email'), date: record.get('Dining Date')});
+      } else if (record => record.get('Dining Date') === formattedToday) {
+        todayDiningReminder(record.get('Email'));
+      } else if (record => record.get('FastPass Date') === dayBefore) {
+        dayBeforeFastPassReminder({email: record.get('Email'), date: record.get('Dining Date')});
+      } else if (record => record.get('FastPass Date') === formattedToday) {
+        todayFastPassReminder(record.get('Email'));
+      }
+    });
 
     fetchNextPage();
+
   }, err => {
     if (err) {
       console.error(`There was an error when checking the database: ${err}`)
     }
-
-    // Write User to the Airtable
-    addToDatabase(email, diningDate, fastPassDate, () => {
-      // Send confirmation email
-      sendEmail({
-        to: email,
-        subject: 'Reminder to make Dining Reservations tommorrow!',
-        body: `Thanks for signing up! <br/><br/> This is just a confirmation email to let you know that ${email} will be receiving an email 24 hours before it's time to make Dining Reservations on ${diningDate} and on the morning of.<br/><br/> You will also be receiving an email 24 hours before it's time to make FastPass Reservations on ${fastPassDate} and on the morning of.  <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
-      }).then(successMessage => {
-        console.log(successMessage);
-        return res.send(`Success!`);
-      }).catch(error => {
-        console.error(`There was an issue sending the confirmation email: ${error}`);
-      });
-    });
   });
 });
 

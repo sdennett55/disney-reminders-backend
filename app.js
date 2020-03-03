@@ -29,7 +29,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.post('/api/submitEmail', function (req, res) {
-  const { email, diningDate, fastPassDate } = req.body.user;
+  const { email, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate } = req.body.user;
 
   // Validate the date and email
   if (!validator.validate(email)) {
@@ -56,12 +56,12 @@ app.post('/api/submitEmail', function (req, res) {
     }
 
     // Write User to the Airtable
-    addToDatabase(email, diningDate, fastPassDate, res, () => {
+    addToDatabase(email, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate, res, () => {
       // Send confirmation email
       sendEmail({
         to: email,
         subject: 'Confirmation for Disney Reservations Reminder!',
-        body: `Thanks for signing up! <br/><br/> This is just a confirmation email to let you know that ${email} will be receiving an email 24 hours before it's time to make Dining Reservations on ${new Date(diningDate).toLocaleDateString()} and on the morning of.<br/><br/> You will also be receiving an email 24 hours before it's time to make FastPass Reservations on ${new Date(fastPassDate).toLocaleDateString()} and on the morning of.  <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
+        body: `Thanks for signing up! <br/><br/> This is just a confirmation email to let you know that ${email} will be receiving an email 24 hours before it's time to make Dining Reservations on ${localDiningDate} and on the morning of.<br/><br/> You will also be receiving an email 24 hours before it's time to make FastPass Reservations on ${localFastPassDate} and on the morning of.  <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
       }).then(successMessage => {
         console.log(successMessage);
         return res.send(`Success!`);
@@ -103,25 +103,35 @@ app.get('/api/unsubscribe', function (req, res) {
 
 });
 
-// Check everyday at 6am for Dates
-cron.schedule('57 6 * * *', () => {
+// Check everyday at 7am for Dates
+cron.schedule('0 7 * * *', () => {
 
   console.log('Cron job ran!');
 
   // Check Airtable for any date matches
   checkDatabase((records, fetchNextPage) => {
-    const today = new Date();
+    var today = new Date();
+    today.setHours(7, 0, 0, 0);
     const dayBefore = new Date(today.setDate(today.getDate() + 1));
+
+    var formattedToday = today.toISOString();
+    var formattedDayBefore = dayBefore.toISOString();
     
     // Loop through records
     records.forEach(record => {
-      if (record => record.get('Dining Date') === dayBefore) {
-        dayBeforeDiningReminder({email: record.get('Email'), date: record.get('Dining Date')});
-      } else if (record => record.get('Dining Date') === formattedToday) {
+      if (record.get('Dining Date') === formattedDayBefore) {
+        dayBeforeDiningReminder({
+          email: record.get('Email'), 
+          localTime: record.get("Local Time"),
+        });
+      } else if (record.get('Dining Date') === formattedToday) {
         todayDiningReminder(record.get('Email'));
-      } else if (record => record.get('FastPass Date') === dayBefore) {
-        dayBeforeFastPassReminder({email: record.get('Email'), date: record.get('Dining Date')});
-      } else if (record => record.get('FastPass Date') === formattedToday) {
+      } else if (record.get('FastPass Date') === formattedDayBefore) {
+        dayBeforeFastPassReminder({
+          email: record.get('Email'), 
+          localTime: record.get("Local Time")
+        });
+      } else if (record.get('FastPass Date') === formattedToday) {
         todayFastPassReminder(record.get('Email'));
       }
     });

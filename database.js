@@ -24,13 +24,16 @@ function removeFromDatabase(id, removeCallback) {
   });
 }
 
-function addToDatabase(email, diningDate, fastPassDate, res, addCallback) {
+function addToDatabase(email, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate, res, addCallback) {
   table.create([
     {
       "fields": {
         "Email": email,
         "Dining Date": diningDate,
-        "FastPass Date": fastPassDate
+        "FastPass Date": fastPassDate,
+        "Local Time": localTime,
+        "Local Dining Date": localDiningDate,
+        "Local FastPass Date": localFastPassDate,
       }
     }
   ], function (err, records) {

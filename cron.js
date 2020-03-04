@@ -12,19 +12,20 @@ checkDatabase((records, fetchNextPage) => {
 
   var formattedToday = today.toISOString();
   var formattedDayBefore = dayBefore.toISOString();
-  
+
   // Loop through records
   records.forEach(record => {
+    console.log(`formattedDayBefore: ${formattedDayBefore} formattedToday: ${formattedToday} FastPass Date: record.get('FastPass Date')`);
     if (record.get('Dining Date') === formattedDayBefore) {
       dayBeforeDiningReminder({
-        email: record.get('Email'), 
+        email: record.get('Email'),
         localTime: record.get("Local Time"),
       });
     } else if (record.get('Dining Date') === formattedToday) {
       todayDiningReminder(record.get('Email'));
     } else if (record.get('FastPass Date') === formattedDayBefore) {
       dayBeforeFastPassReminder({
-        email: record.get('Email'), 
+        email: record.get('Email'),
         localTime: record.get("Local Time")
       });
     } else if (record.get('FastPass Date') === formattedToday) {

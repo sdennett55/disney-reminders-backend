@@ -7,7 +7,8 @@ console.log('Cron job ran!');
 // Check Airtable for any date matches
 checkDatabase((records, fetchNextPage) => {
   var today = new Date();
-  today.setHours(7, 0, 0, 0);
+  // 7AM EST
+  today.setHours(12, 0, 0, 0);
   const dayBefore = new Date(today.setDate(today.getDate() + 1));
 
   var formattedToday = today.toISOString();

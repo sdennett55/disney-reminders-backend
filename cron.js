@@ -10,25 +10,25 @@ checkDatabase((records, fetchNextPage) => {
   var today = new Date();
   const dayBefore = new Date(today.setDate(today.getDate() + 1));
 
-  var formattedToday = today.toISOString();
-  var formattedDayBefore = dayBefore.toISOString();
+  var formattedToday = today.toISOString().split('T')[0];
+  var formattedDayBefore = dayBefore.toISOString().split('T')[0];
 
   // Loop through records
   records.forEach(record => {
     console.log(`formattedDayBefore: ${formattedDayBefore} formattedToday: ${formattedToday} FastPass Date: ${record.get('FastPass Date')}`);
-    if (record.get('Dining Date') === formattedDayBefore) {
+    if (record.get('Dining Date').includes(formattedDayBefore)) {
       dayBeforeDiningReminder({
         email: record.get('Email'),
         localTime: record.get("Local Time"),
       });
-    } else if (record.get('Dining Date') === formattedToday) {
+    } else if (record.get('Dining Date').includes(formattedToday)) {
       todayDiningReminder(record.get('Email'));
-    } else if (record.get('FastPass Date') === formattedDayBefore) {
+    } else if (record.get('FastPass Date').includes(formattedDayBefore)) {
       dayBeforeFastPassReminder({
         email: record.get('Email'),
         localTime: record.get("Local Time")
       });
-    } else if (record.get('FastPass Date') === formattedToday) {
+    } else if (record.get('FastPass Date').includes(formattedToday)) {
       todayFastPassReminder(record.get('Email'));
     }
   });

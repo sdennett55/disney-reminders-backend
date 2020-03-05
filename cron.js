@@ -1,34 +1,35 @@
 require('dotenv').config({ path: __dirname + '/.env' });
 const {checkDatabase} = require('./database');
 const {dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPassReminder, todayFastPassReminder } = require('./send_email');
+const momentTz = require('moment-timezone');
 
 console.log('Cron job ran!');
 
 // Check Airtable for any date matches
 checkDatabase((records, fetchNextPage) => {
-  // Today in UTC
-  var today = new Date();
-  const dayBefore = new Date(today.setDate(today.getDate() + 1));
+  // Today in UTC when this runs at 12:00 UTC (7am EST)
+  var today = momentTz(value).utc().format();
+  const dayBefore = today.subtract(1, 'd').format();
 
-  var formattedToday = today.toISOString().split('T')[0];
-  var formattedDayBefore = dayBefore.toISOString().split('T')[0];
+  // var formattedToday = today.toISOString().split('T')[0];
+  // var formattedDayBefore = dayBefore.toISOString().split('T')[0];
 
   // Loop through records
   records.forEach(record => {
-    console.log(`formattedDayBefore: ${formattedDayBefore} formattedToday: ${formattedToday} FastPass Date: ${record.get('FastPass Date')}`);
-    if (record.get('Dining Date').includes(formattedDayBefore)) {
+    console.log(`dayBefore: ${dayBefore} today: ${today} FastPass Date: ${record.get('FastPass Date')}`);
+    if (record.get('Dining Date').includes(dayBefore)) {
       dayBeforeDiningReminder({
         email: record.get('Email'),
         localTime: record.get("Local Time"),
       });
-    } else if (record.get('Dining Date').includes(formattedToday)) {
+    } else if (record.get('Dining Date').includes(today)) {
       todayDiningReminder(record.get('Email'));
-    } else if (record.get('FastPass Date').includes(formattedDayBefore)) {
+    } else if (record.get('FastPass Date').includes(dayBefore)) {
       dayBeforeFastPassReminder({
         email: record.get('Email'),
         localTime: record.get("Local Time")
       });
-    } else if (record.get('FastPass Date').includes(formattedToday)) {
+    } else if (record.get('FastPass Date').includes(today)) {
       todayFastPassReminder(record.get('Email'));
     }
   });

@@ -2,17 +2,15 @@ require('dotenv').config({ path: __dirname + '/.env' });
 const {checkDatabase} = require('./database');
 const {dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPassReminder, todayFastPassReminder } = require('./send_email');
 const momentTz = require('moment-timezone');
+var moment = require('moment');
 
 console.log('Cron job ran!');
 
 // Check Airtable for any date matches
 checkDatabase((records, fetchNextPage) => {
   // Today in UTC when this runs at 12:00 UTC (7am EST)
-  var today = momentTz(value).utc().format();
-  const dayBefore = today.subtract(1, 'd').format();
-
-  // var formattedToday = today.toISOString().split('T')[0];
-  // var formattedDayBefore = dayBefore.toISOString().split('T')[0];
+  var today = momentTz().utc().format().split('T')[0];
+  const dayBefore = moment(today).subtract(1, 'd').utc().format().split('T')[0];
 
   // Loop through records
   records.forEach(record => {

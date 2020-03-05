@@ -10,11 +10,11 @@ console.log('Cron job ran!');
 checkDatabase((records, fetchNextPage) => {
   // Today in UTC when this runs at 12:00 UTC (7am EST)
   var today = momentTz().utc().format().split('T')[0];
-  const dayBefore = moment(today).subtract(1, 'd').utc().format().split('T')[0];
+  const dayBefore = moment(today).add(1, 'd').utc().format().split('T')[0];
 
   // Loop through records
   records.forEach(record => {
-    console.log(`dayBefore: ${dayBefore} today: ${today} FastPass Date: ${record.get('FastPass Date')}`);
+    console.log(`dayBefore: ${dayBefore} today: ${today} FastPass Date: ${record.get('FastPass Date')} Dining Date: ${record.get('Dining Date')}`);
     if (record.get('Dining Date').includes(dayBefore)) {
       dayBeforeDiningReminder({
         email: record.get('Email'),

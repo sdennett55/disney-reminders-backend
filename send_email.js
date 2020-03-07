@@ -8,13 +8,13 @@ function sendEmail({ to, subject, body }) {
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'waitupgame@gmail.com',
+        user: 'disneytoolkit@gmail.com',
         pass: process.env['EMAIL_PASSWORD']
       }
     });
 
     var mailOptions = {
-      from: 'waitupgame@gmail.com',
+      from: 'disneytoolkit@gmail.com',
       to,
       subject,
       html: body

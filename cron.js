@@ -18,17 +18,25 @@ checkDatabase((records, fetchNextPage) => {
     if (record.get('Dining Date').includes(dayBefore)) {
       dayBeforeDiningReminder({
         email: record.get('Email'),
-        localTime: record.get("Local Time"),
+        localTime: record.get('Local Time'),
+        phone: record.get('Phone'),
       });
     } else if (record.get('Dining Date').includes(today)) {
-      todayDiningReminder(record.get('Email'));
+      todayDiningReminder({
+        email: record.get('Email'),
+        phone: record.get('Phone'),
+      });
     } else if (record.get('FastPass Date').includes(dayBefore)) {
       dayBeforeFastPassReminder({
         email: record.get('Email'),
-        localTime: record.get("Local Time")
+        localTime: record.get('Local Time'),
+        phone: record.get('Phone'),
       });
     } else if (record.get('FastPass Date').includes(today)) {
-      todayFastPassReminder(record.get('Email'));
+      todayFastPassReminder({
+        email: record.get('Email'),
+        phone: record.get('Phone'),
+      });
     }
   });
 

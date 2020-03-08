@@ -1,7 +1,22 @@
 var nodemailer = require('nodemailer');
+const Nexmo = require('nexmo');
 
 const environment = process.env.NODE_ENV;
 const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 'https://disney-reminders-backend.herokuapp.com';
+
+// Texting
+const nexmo = new Nexmo({
+  apiKey: process.env.TEXT_API_KEY,
+  apiSecret: process.env.TEXT_API_SECRET,
+});
+
+function sendText({phone, text}) {
+  const from = '18018933628';
+
+  nexmo.message.sendSms(from, phone, text, {}, (error) => {
+    console.error(`There was an issue sending the reminder text: ${error}`);
+  });
+}
 
 function sendEmail({ to, subject, body }) {
   return new Promise((resolve, reject) => {
@@ -33,7 +48,10 @@ function sendEmail({ to, subject, body }) {
   })
 }
 
-function dayBeforeDiningReminder({email, localTime}) {
+function dayBeforeDiningReminder({email, phone}) {
+  if (phone) {
+    sendText({phone, text: `Reminder to make your Disney Dining Reservations tommorrow at 7am EST!`});
+  }
   return sendEmail({
     to: email,
     subject: 'Reminder to make your Disney Dining Reservations tommorrow!',
@@ -47,7 +65,10 @@ function dayBeforeDiningReminder({email, localTime}) {
   });
 }
 
-function todayDiningReminder(email) {
+function todayDiningReminder({email, phone}) {
+  if (phone) {
+    sendText({phone, text: `Reminder to make your Disney Dining Reservations today!`});
+  }
   return sendEmail({
     to: email,
     subject: 'Reminder to make your Advanced Dining Reservations TODAY!',
@@ -61,7 +82,10 @@ function todayDiningReminder(email) {
   });
 }
 
-function dayBeforeFastPassReminder({email, localTime}) {
+function dayBeforeFastPassReminder({email, phone}) {
+  if (phone) {
+    sendText({phone, text: `Reminder to make your FastPass+ Reservations tommorrow at 7am EST!`});
+  }
   return sendEmail({
     to: email,
     subject: 'Reminder to book your Disney FastPass+ reservations tommorrow!',
@@ -75,7 +99,10 @@ function dayBeforeFastPassReminder({email, localTime}) {
   });
 }
 
-function todayFastPassReminder(email) {
+function todayFastPassReminder({email, phone}) {
+  if (phone) {
+    sendText({phone, text: `Reminder to make your Disney Dining Reservations today!`});
+  }
   return sendEmail({
     to: email,
     subject: 'Reminder to make your FastPass+ Reservations TODAY!',

@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const validator = require("email-validator");
 const isValidDate = require('date-fns/isValid');
 const parseISO = require('date-fns/parseISO');
-const {sendEmail, dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPassReminder, todayFastPassReminder } = require('./send_email');
+const {sendEmail, sendText } = require('./send_email');
 const { checkDatabase, removeFromDatabase, addToDatabase } = require('./database');
 const cors = require('cors');
 
@@ -56,7 +56,11 @@ app.post('/api/submitEmail', function (req, res) {
     }
 
     // Write User to the Airtable
-    addToDatabase(email, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate, res, () => {
+    addToDatabase(email, phone, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate, res, () => {
+      // Send confirmation text
+      if (phone) {
+        sendText({phone, text: `Confirmation from DisneyTookit that you will receive a text to book Dining and FastPass+ Reservations on this number! \n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe?email=${email}`});
+      }
       // Send confirmation email
       sendEmail({
         to: email,

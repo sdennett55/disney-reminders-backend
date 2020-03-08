@@ -116,4 +116,4 @@ function todayFastPassReminder({email, phone}) {
   });
 }
 
-module.exports = {sendEmail, dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPassReminder,todayFastPassReminder};
+module.exports = {sendEmail, sendText, dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPassReminder,todayFastPassReminder};

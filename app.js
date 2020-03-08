@@ -29,7 +29,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.post('/api/submitEmail', function (req, res) {
-  const { email, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate } = req.body.user;
+  const { email, phone, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate } = req.body.user;
 
   // Validate the date and email
   if (!validator.validate(email)) {

@@ -1,22 +1,8 @@
 var nodemailer = require('nodemailer');
-const Nexmo = require('nexmo');
+const sendText = require('./send_text');
 
 const environment = process.env.NODE_ENV;
 const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 'https://disney-reminders-backend.herokuapp.com';
-
-// Texting
-const nexmo = new Nexmo({
-  apiKey: process.env.TEXT_API_KEY,
-  apiSecret: process.env.TEXT_API_SECRET,
-});
-
-function sendText({phone, text}) {
-  const from = '18018933628';
-
-  nexmo.message.sendSms(from, phone, text, {}, (error) => {
-    console.error(`There was an issue sending the reminder text: ${error}`);
-  });
-}
 
 function sendEmail({ to, subject, body }) {
   return new Promise((resolve, reject) => {

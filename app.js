@@ -59,11 +59,9 @@ app.post('/api/submitEmail', function (req, res) {
     addToDatabase(email, phone, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate, res, () => {
       // Send confirmation text
       if (phone) {
-        console.log(`Phone exists: ${phone}`);
-        sendText({phone, text: `Confirmation from DisneyTookit that you will receive a text to book Dining and FastPass+ Reservations on this number! \n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe?email=${email}`});
-      } else {
-        console.log(`Phone doesn't exist: ${phone}`);
+        sendText({phone, text: `Confirmation from DisneyTookit that you will receive a text to book Dining and FastPass+ Reservations on this number! \n\n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe?email=${email}\n\n`});
       }
+
       // Send confirmation email
       sendEmail({
         to: email,

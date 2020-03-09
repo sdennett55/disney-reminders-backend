@@ -8,6 +8,7 @@ const parseISO = require('date-fns/parseISO');
 const {sendEmail, sendText } = require('./send_email');
 const { checkDatabase, removeFromDatabase, addToDatabase } = require('./database');
 const cors = require('cors');
+const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
 const Sentry = require('@sentry/node'); // white space add
 Sentry.init({ dsn: 'https://d4e891bb61ad4db29a96263feffd48fe@sentry.io/3357421' });
@@ -40,6 +41,9 @@ app.post('/api/submitEmail', function (req, res) {
   }
   if (!isValidDate(parseISO(fastPassDate))) {
     return res.send(`Your date is not valid.`);
+  }
+  if (phone && !phoneUtil.isValidNumber(phoneUtil.parse('+' + phone))) {
+    return res.send(`Your phone number is not valid.`);
   }
 
   // Check Airtable

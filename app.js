@@ -55,23 +55,25 @@ app.post('/api/submitEmail', function (req, res) {
     }
 
     fetchNextPage();
-  }, err => {
+  }, (err, records) => {
     if (err) {
       console.error(`There was an error when checking the database: ${err}`)
     }
 
     // Write User to the Airtable
-    addToDatabase(email, phone, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate, res, () => {
+    addToDatabase(email, phone, diningDate, fastPassDate, localTime, localDiningDate, localFastPassDate, res, (records) => {
+      const id = records.find(record => record.get('Email') === email).getId();
+
       // Send confirmation text
       if (phone) {
-        sendText({phone, text: `Confirmation from DisneyTookit that you will receive a text to book Dining and FastPass+ Reservations on this number! \n\n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe?email=${email}\n\n`});
+        sendText({phone, text: `Confirmation from DisneyTookit that you will receive a text to book Dining and FastPass+ Reservations on this number! \n\n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`});
       }
 
       // Send confirmation email
       sendEmail({
         to: email,
         subject: 'Confirmation for Disney Reservations Reminder!',
-        body: `Thanks for signing up! <br/><br/> This is just a confirmation email to let you know that ${email} will be receiving an email 24 hours before it's time to make Dining Reservations on ${localDiningDate} and on the morning of.<br/><br/> You will also be receiving an email 24 hours before it's time to make FastPass Reservations on ${localFastPassDate} and on the morning of.  <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
+        body: `Thanks for signing up! <br/><br/> This is just a confirmation email to let you know that ${email} will be receiving an email 24 hours before it's time to make Dining Reservations on ${localDiningDate} and on the morning of.<br/><br/> You will also be receiving an email 24 hours before it's time to make FastPass Reservations on ${localFastPassDate} and on the morning of.  <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe/${id}">unsubscribe</a> at any time.`
       }).then(successMessage => {
         console.log(successMessage);
         return res.send(`Success!`);
@@ -84,23 +86,22 @@ app.post('/api/submitEmail', function (req, res) {
 
 });
 
-app.get('/api/unsubscribe', function (req, res) {
-  const { email } = req.query;
+app.get('/api/unsubscribe/:id', function (req, res) {
+  const { id } = req.params;
 
   // Find ID in the Airtable
   checkDatabase((records, fetchNextPage) => {
-    var emailMatch = records.find(record => record.get('Email') === email);
-    var id = emailMatch ? emailMatch.getId() : null;
+    var idMatch = records.find(record => record.getId() === id);
 
     // If no ID matches yet, keep looking
-    if (!id) {
+    if (!idMatch) {
       fetchNextPage();
     } else {
       // Remove ID from Airtable
       removeFromDatabase(id, deletedRecords => {
         console.log('Deleted', deletedRecords.length, 'records');
         // Send success message
-        return res.send(`${email} has been successfully unsubscribed!`);
+        return res.send(`User with email ${idMatch.get('Email')} has been successfully unsubscribed!`);
       });
     }
   }, err => {
@@ -108,9 +109,9 @@ app.get('/api/unsubscribe', function (req, res) {
       console.error(`There was an issue finding the user ID in the database: ${err}`)
     }
 
-    return res.send('This email does not currently exist in the database.');
+    return res.send('This user does not currently exist in the database.');
   });
 
 });
 
-app.listen(process.env['PORT'], () => console.log(`Example app listening on port ${process.env['PORT']}!`))
+app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}!`))

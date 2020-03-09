@@ -16,23 +16,27 @@ checkDatabase((records, fetchNextPage) => {
   records.forEach(record => {
     if (record.get('Dining Date').includes(dayBefore)) {
       dayBeforeDiningReminder({
+        id: record.getId(),
         email: record.get('Email'),
         localTime: record.get('Local Time'),
         phone: record.get('Phone'),
       });
     } else if (record.get('Dining Date').includes(today)) {
       todayDiningReminder({
+        id: record.getId(),
         email: record.get('Email'),
         phone: record.get('Phone'),
       });
     } else if (record.get('FastPass Date').includes(dayBefore)) {
       dayBeforeFastPassReminder({
+        id: record.getId(),
         email: record.get('Email'),
         localTime: record.get('Local Time'),
         phone: record.get('Phone'),
       });
     } else if (record.get('FastPass Date').includes(today)) {
       todayFastPassReminder({
+        id: record.getId(),
         email: record.get('Email'),
         phone: record.get('Phone'),
       });

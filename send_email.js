@@ -13,7 +13,7 @@ function sendEmail({ to, subject, body }) {
       service: "gmail",
       auth: {
         user: "disneytoolkit@gmail.com",
-        pass: process.env["EMAIL_PASSWORD"]
+        pass: process.env.EMAIL_PASSWORD,
       }
     });
 
@@ -41,7 +41,7 @@ function sendEmail({ to, subject, body }) {
   });
 }
 
-function dayBeforeDiningReminder({ email, phone }) {
+function dayBeforeDiningReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
@@ -53,7 +53,7 @@ function dayBeforeDiningReminder({ email, phone }) {
     subject: "Reminder to make your Disney Dining Reservations tommorrow!",
     body: `Tomorrow at 7am EST you can start booking your Dining Reservations for your trip to Walt Disney World! <br/><br/>Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning, as well. Good luck!
 
-    <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
+    <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe/${id}">unsubscribe</a> at any time.`
   })
     .then(successMessage => {
       console.log(successMessage);
@@ -65,7 +65,7 @@ function dayBeforeDiningReminder({ email, phone }) {
     });
 }
 
-function todayDiningReminder({ email, phone }) {
+function todayDiningReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
@@ -77,7 +77,7 @@ function todayDiningReminder({ email, phone }) {
     subject: "Reminder to make your Advanced Dining Reservations TODAY!",
     body: `Today, starting now, you can begin making your Dining Reservations for your trip to Walt Disney World! Good luck! <br/><br/>Dining Reservations: <a href="https://disneyworld.disney.go.com/dining/">https://disneyworld.disney.go.com/dining/</a>
 
-    <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
+    <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe/${id}">unsubscribe</a> at any time.`
   })
     .then(successMessage => {
       console.log(successMessage);
@@ -89,7 +89,7 @@ function todayDiningReminder({ email, phone }) {
     });
 }
 
-function dayBeforeFastPassReminder({ email, phone }) {
+function dayBeforeFastPassReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
@@ -101,7 +101,7 @@ function dayBeforeFastPassReminder({ email, phone }) {
     subject: "Reminder to book your Disney FastPass+ reservations tommorrow!",
     body: `Tomorrow at 7am EST you can start booking your FastPass+ Reservations for your trip to Walt Disney World!<br/><br/> Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning as well. Good luck!
 
-    <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
+    <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe/${id}">unsubscribe</a> at any time.`
   })
     .then(successMessage => {
       console.log(successMessage);
@@ -113,7 +113,7 @@ function dayBeforeFastPassReminder({ email, phone }) {
     });
 }
 
-function todayFastPassReminder({ email, phone }) {
+function todayFastPassReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
@@ -125,7 +125,7 @@ function todayFastPassReminder({ email, phone }) {
     subject: "Reminder to make your FastPass+ Reservations TODAY!",
     body: `Today, starting now, you can begin making your FastPass+ Reservations for your trip to Walt Disney World! Good luck! <br/><br/>FastPass Reservations: <a href="https://disneyworld.disney.go.com/fastpass-plus/select-party/">https://disneyworld.disney.go.com/fastpass-plus/select-party/</a>
 
-    <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe?email=${email}">unsubscribe</a> at any time.`
+    <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe/${id}">unsubscribe</a> at any time.`
   })
     .then(successMessage => {
       console.log(successMessage);

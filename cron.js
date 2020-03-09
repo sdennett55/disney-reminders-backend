@@ -14,7 +14,6 @@ checkDatabase((records, fetchNextPage) => {
 
   // Loop through records
   records.forEach(record => {
-    console.log(`dayBefore: ${dayBefore} today: ${today} FastPass Date: ${record.get('FastPass Date')} Dining Date: ${record.get('Dining Date')}`);
     if (record.get('Dining Date').includes(dayBefore)) {
       dayBeforeDiningReminder({
         email: record.get('Email'),

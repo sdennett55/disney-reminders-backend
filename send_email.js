@@ -45,7 +45,7 @@ function dayBeforeDiningReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
-      text: `Reminder to make your Disney Dining Reservations tommorrow at 7am EST!`
+      text: `Reminder to make your Disney Dining Reservations tommorrow at 7am EST! \n\n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`
     });
   }
   return sendEmail({
@@ -69,7 +69,7 @@ function todayDiningReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
-      text: `Reminder to make your Disney Dining Reservations today!`
+      text: `Reminder to make your Disney Dining Reservations today! \n\n https://disneyworld.disney.go.com/dining/ \n\n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`
     });
   }
   return sendEmail({
@@ -93,7 +93,7 @@ function dayBeforeFastPassReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
-      text: `Reminder to make your FastPass+ Reservations tommorrow at 7am EST!`
+      text: `Reminder to make your FastPass+ Reservations tommorrow at 7am EST! \n\n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`
     });
   }
   return sendEmail({
@@ -117,7 +117,7 @@ function todayFastPassReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
-      text: `Reminder to make your Disney Dining Reservations today!`
+      text: `Reminder to make your Disney Dining Reservations today! \n\n https://disneyworld.disney.go.com/fastpass-plus/select-party/ \n\n Go here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`
     });
   }
   return sendEmail({

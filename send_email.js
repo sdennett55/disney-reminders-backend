@@ -14,6 +14,9 @@ function sendEmail({ to, subject, body }) {
       auth: {
         user: "disneytoolkit@gmail.com",
         pass: process.env.EMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false
       }
     });
 

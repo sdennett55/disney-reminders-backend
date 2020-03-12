@@ -23,6 +23,7 @@
     "email-validator": "^2.0.4",
     "express": "^4.17.1",
     "google-libphonenumber": "^3.2.7",
+    "googleapis": "^48.0.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
     "nexmo": "^2.6.0",

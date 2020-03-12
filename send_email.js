@@ -1,5 +1,18 @@
-var nodemailer = require("nodemailer");
+require('dotenv').config({ path: __dirname + '/.env' });
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 const sendText = require("./send_text");
+
+const OAuth2 = google.auth.OAuth2;
+const oauth2Client = new OAuth2(
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  "https://developers.google.com/oauthplayground" // Redirect URL
+);
+oauth2Client.setCredentials({
+  refresh_token: process.env.REFRESH_TOKEN
+});
+const accessToken = oauth2Client.getAccessToken();
 
 const environment = process.env.NODE_ENV;
 const RELATIVE_PATH =
@@ -12,8 +25,12 @@ function sendEmail({ to, subject, body }) {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
+        type: "OAuth2",
         user: "disneytoolkit@gmail.com",
-        pass: process.env.EMAIL_PASSWORD,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessToken: accessToken,
       },
       tls: {
         rejectUnauthorized: false

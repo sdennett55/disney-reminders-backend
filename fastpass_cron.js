@@ -18,7 +18,6 @@ checkDatabase((records, fetchNextPage) => {
       dayBeforeFastPassReminder({
         id: record.getId(),
         email: record.get('Email'),
-        localTime: record.get('Local Time'),
         phone: record.get('Phone'),
       });
     } else if (record.get('FastPass Date').includes(today)) {

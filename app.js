@@ -65,7 +65,9 @@ app.post('/api/submitEmail', function (req, res) {
 
       // Send confirmation text
       if (phone) {
-        sendText({phone, text: `Confirmation from DisneyTookit that you will receive a text to book Dining and FastPass+ Reservations on this number!
+        sendText({phone, text: `Confirmation from DisneyTookit that you will receive a text on this number!
+        \n\nDining Reservations: ${localDiningDate} at 6am EST
+        \nFastPass+ Reservations: ${localFastPassDate} at 7am EST
         \n\nGo here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`});
       }
 

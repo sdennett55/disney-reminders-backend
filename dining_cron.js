@@ -18,7 +18,6 @@ checkDatabase((records, fetchNextPage) => {
       dayBeforeDiningReminder({
         id: record.getId(),
         email: record.get('Email'),
-        localTime: record.get('Local Time'),
         phone: record.get('Phone'),
       });
     } else if (record.get('Dining Date').includes(today)) {

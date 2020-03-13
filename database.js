@@ -33,7 +33,6 @@ function addToDatabase(email, phone, diningDate, fastPassDate, localTime, localD
         "Email": email,
         "Dining Date": diningDate,
         "FastPass Date": fastPassDate,
-        "Local Time": localTime,
         "Local Dining Date": localDiningDate,
         "Local FastPass Date": localFastPassDate,
         "Phone": phone,

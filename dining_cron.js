@@ -1,14 +1,14 @@
 require('dotenv').config({ path: __dirname + '/.env' });
 const {checkDatabase} = require('./database');
-const {dayBeforeDiningReminder, todayDiningReminder, dayBeforeFastPassReminder, todayFastPassReminder } = require('./send_email');
+const {dayBeforeDiningReminder, todayDiningReminder } = require('./send_email');
 const momentTz = require('moment-timezone');
 var moment = require('moment');
 
-console.log('Cron job ran!');
+console.log('Dining cron job ran!');
 
 // Check Airtable for any date matches
 checkDatabase((records, fetchNextPage) => {
-  // Today in UTC when this runs at 12:00 UTC (7am EST)
+  // Today in UTC (with DST) when this runs at 10:00 UTC (6am EST)
   var today = momentTz().utc().format().split('T')[0];
   const dayBefore = moment(today).add(1, 'd').utc().format().split('T')[0];
 
@@ -23,19 +23,6 @@ checkDatabase((records, fetchNextPage) => {
       });
     } else if (record.get('Dining Date').includes(today)) {
       todayDiningReminder({
-        id: record.getId(),
-        email: record.get('Email'),
-        phone: record.get('Phone'),
-      });
-    } else if (record.get('FastPass Date').includes(dayBefore)) {
-      dayBeforeFastPassReminder({
-        id: record.getId(),
-        email: record.get('Email'),
-        localTime: record.get('Local Time'),
-        phone: record.get('Phone'),
-      });
-    } else if (record.get('FastPass Date').includes(today)) {
-      todayFastPassReminder({
         id: record.getId(),
         email: record.get('Email'),
         phone: record.get('Phone'),

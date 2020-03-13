@@ -1,6 +1,5 @@
 require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
-const cron = require('node-cron');
 const bodyParser = require('body-parser');
 const validator = require("email-validator");
 const isValidDate = require('date-fns/isValid');

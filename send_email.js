@@ -65,13 +65,13 @@ function dayBeforeDiningReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
-      text: `Reminder to make your Disney Dining Reservations tommorrow at 6am EST! \n\nWe'll send you another text tomorrow at 6am EST. \n\nGo here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`
+      text: `Reminder to make your Disney Dining Reservations tommorrow at 6am ET! \n\nWe'll send you another text tomorrow at 6am ET. \n\nGo here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`
     });
   }
   return sendEmail({
     to: email,
     subject: "Reminder to make your Disney Dining Reservations tommorrow!",
-    body: `Tomorrow at 6am EST you can start booking your Dining Reservations for your trip to Walt Disney World! <br/><br/>Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning, as well. Good luck!
+    body: `Tomorrow at 6am ET you can start booking your Dining Reservations for your trip to Walt Disney World! <br/><br/>Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning, as well. Good luck!
 
     <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe/${id}">unsubscribe</a> at any time.`
   })
@@ -113,13 +113,13 @@ function dayBeforeFastPassReminder({id, email, phone }) {
   if (phone) {
     sendText({
       phone,
-      text: `Reminder to make your FastPass+ Reservations tommorrow at 7am EST! \n\nWe'll send you another text tomorrow at 7am EST. \n\nGo here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`
+      text: `Reminder to make your FastPass+ Reservations tommorrow at 7am ET! \n\nWe'll send you another text tomorrow at 7am ET. \n\nGo here to unsubscribe at any time: ${RELATIVE_PATH}/api/unsubscribe/${id}`
     });
   }
   return sendEmail({
     to: email,
     subject: "Reminder to book your Disney FastPass+ reservations tommorrow!",
-    body: `Tomorrow at 7am EST you can start booking your FastPass+ Reservations for your trip to Walt Disney World!<br/><br/> Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning as well. Good luck!
+    body: `Tomorrow at 7am ET you can start booking your FastPass+ Reservations for your trip to Walt Disney World!<br/><br/> Make sure to set an alarm so you can start booking right away! We will send you a courtesy email in the morning as well. Good luck!
 
     <br/><br/>Please feel free to <a href="${RELATIVE_PATH}/api/unsubscribe/${id}">unsubscribe</a> at any time.`
   })

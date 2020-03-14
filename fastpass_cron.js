@@ -8,7 +8,7 @@ console.log('FastPass cron job ran!');
 
 // Check Airtable for any date matches
 checkDatabase((records, fetchNextPage) => {
-  // Today in UTC (with DST) when this runs at 11:00 UTC (7am EST)
+  // Today in UTC (with DST) when this runs at 11:00 UTC (7am ET)
   var today = momentTz().utc().format().split('T')[0];
   const dayBefore = moment(today).add(1, 'd').utc().format().split('T')[0];
 

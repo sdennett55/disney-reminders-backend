@@ -10,7 +10,7 @@ When booking a trip through Disney, Disney will usually send email reminders to 
 
 The difference with this tool is that you can get on-the-minute reminders via both email and text for free!
 
-Dining reservations can be made online starting at 6am EST and FastPass reservations can be made online starting at 7am EST. This tool is designed to remind you exactly at these times, both 24 hours before and on the day of, so you don't miss a beat.
+Dining reservations can be made online starting at 6am ET and FastPass reservations can be made online starting at 7am ET. This tool is designed to remind you exactly at these times, both 24 hours before and on the day of, so you don't miss a beat.
 
 A subscribed user can unsubscribe at any time via their confirmation email or text. Once unsubscribed, the user is completely removed from the database. This is a small pet project. I have no intentions to sell your data. If you do not wish to submit your contact information, feel free to set your arrival date on the site and then manually add those dates to your calendar or to a reminder on your phone!
 

@@ -1,6 +1,7 @@
 require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
 const validator = require("email-validator");
 const isValidDate = require('date-fns/isValid');
 const parseISO = require('date-fns/parseISO');
@@ -20,6 +21,8 @@ const RELATIVE_PATH = environment === 'development' ? 'http://localhost:8000' : 
 var app = express();
 
 app.use(cors());
+
+app.use(helmet());
 
 app.use(
   bodyParser.urlencoded({

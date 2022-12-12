@@ -21,7 +21,7 @@
     "date-fns": "^2.10.0",
     "dotenv": "^8.2.0",
     "email-validator": "^2.0.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "google-libphonenumber": "^3.2.7",
     "googleapis": "^48.0.0",
     "helmet": "^3.21.3",
